@@ -1,0 +1,15 @@
+.car
+{
+    width: 50px;
+    height: 50px;
+    background-color: red;
+}
+.pista{
+    width: 100%;
+}
+
+#demo
+{
+    color: red;
+}
+
