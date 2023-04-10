@@ -40,7 +40,14 @@ class Enemy extends Asset{
     }
 }
 
-class Bullet
+class Bullet extends Asset
 {
-
+    constructor(x , y, width, height, color, speed, on)
+    {
+        super(width, height, color);
+        this.x = x;
+        this.y = y;
+        this.speed = speed;
+        this.on = on;
+    }
 }

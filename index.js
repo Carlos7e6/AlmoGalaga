@@ -1,5 +1,8 @@
 var enemies = [];
 var bullets = [];
+var numBullets = 10;
+var counter = 0;
+
 var score = 0;
 var lose = false;
 
@@ -10,9 +13,19 @@ var rec = canvas.getBoundingClientRect();
 
 var player = new Player(canvas.width, canvas.height, 20, 20, "blue");
 
-var interCreateEnemy = setInterval(createEnemy, 2000);
+var interCreateEnemy = setInterval(createEnemy, 500);
 var interMoveEnemy = setInterval(moveEnemies, 500);
-var interCreateBullet = setInterval(createBullet, 1000);
+var interCreateBullet = setInterval(createBullet, 500);
+var interMoveBullet = setInterval(moveBullet, 100);
+
+function fillAmmo() {
+    for (let i = 0; i < numBullets; i++) {
+        bullets.push(new Bullet(player.x, player.y - player.height - 1, 5, 10, "green", -20, false));
+    }
+    console.log(bullets);
+}
+
+fillAmmo();
 
 
 function movePlayer(event) {
@@ -35,30 +48,43 @@ function actPlayer(newX, newY) {
 }
 
 function Update() {
-   
-    for (let i= 0; i < enemies.length;i++) 
-    {
+
+    for (let i = 0; i < enemies.length; i++) {
         if (player.checkCollision(enemies[i])) {
             lose = true;
         }
 
-        if(enemies[i].y >= rec.height){
-            enemies.splice(i,1);
-            console.log(enemies);
+        if (enemies[i].y >= rec.height) {
+            lose = true;
         }
     }
 
-    if (lose) 
-    {
+    if (lose) {
         clearInterval(interCreateEnemy);
         clearInterval(interMoveEnemy);
-        ctx.clearRect(player.x - player.width / 2, player.y - player.height / 2, player.width + 1, player.height + 1);
+        clearInterval(interCreateBullet);
+        clearInterval(interMoveBullet);
+        
+        deleteRect(player);
+
         ctx.font = "30px Arial"; // Fuente y tamaño de fuente
         ctx.fillStyle = "black"; // Color del texto
         ctx.fillText("Has perdido!", canvas.width / 2, canvas.height / 2);
     }
-    else 
-    {
+    else {
+        for (let i = 0; i < bullets.length; i++) {
+            for (let j = 0; j < enemies.length; j++) {
+
+                if (bullets[i].checkCollision(enemies[j])) 
+                {
+                    deleteRect(enemies[j]);
+                    deleteRect(bullets[i]);
+                    bullets[i].on = false;
+                    enemies.splice(j, 1);
+                }
+
+            }
+        }
 
     }
     requestAnimationFrame(Update);
@@ -77,17 +103,58 @@ function createEnemy() {
 }
 
 function moveEnemies() {
-    for (let i = 0; i < enemies.length; i++) {
-        ctx.clearRect(enemies[i].x - 1, enemies[i].y - 1, enemies[i].width + 2, enemies[i].height + 2);
-        ctx.fillStyle = enemies[i].color;
+    for (let i = 0; i < enemies.length; i++) 
+    {
+        deleteRect(enemies[i]);
+
         enemies[i].y = enemies[i].y + enemies[i].speed;
-        ctx.fillRect(enemies[i].x, enemies[i].y, enemies[i].width, enemies[i].height)
+
+        createRect(enemies[i]);
     }
 }
 
-function createBullet()
+function createBullet() 
 {
+    if (bullets[counter].on == false) 
+    {
+        bullets[counter].on = true;
+        bullets[counter].x = player.x;
+        bullets[counter].y = player.y;
+    }
+    counter++;
+    if(counter == numBullets){
+        counter = 0;
+    }
+}
 
+function moveBullet() {
+    for (let i = 0; i < bullets.length; i++) {
+
+        if (bullets[i].on == true) {
+
+            deleteRect(bullets[i]);
+            bullets[i].y = bullets[i].y + bullets[i].speed;
+
+            if (bullets[i].y <= 0) {
+                bullets[i].on = false;
+            }
+            else 
+            {
+                createRect(bullets[i]);
+            }
+        }
+    }
+}
+
+function createRect(thing) {
+    ctx.fillStyle = thing.color;
+    ctx.fillRect(thing.x, thing.y, thing.width, thing.height);
+}
+
+
+
+function deleteRect(thing) {
+    ctx.clearRect(thing.x - 1, thing.y - 1, thing.width + 2, thing.height + 2);
 }
 
 
