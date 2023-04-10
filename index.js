@@ -103,6 +103,8 @@ function createEnemy() {
 }
 
 function moveEnemies() {
+
+
     for (let i = 0; i < enemies.length; i++) 
     {
         deleteRect(enemies[i]);
