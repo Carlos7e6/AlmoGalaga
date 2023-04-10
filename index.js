@@ -12,6 +12,7 @@ var ctx = canvas.getContext("2d");
 var rec = canvas.getBoundingClientRect();
 
 var player = new Player(canvas.width, canvas.height, 20, 20, "blue");
+createRect(player);
 
 var interCreateEnemy = setInterval(createEnemy, 500);
 var interMoveEnemy = setInterval(moveEnemies, 500);
@@ -37,13 +38,16 @@ function movePlayer(event) {
 
 function actPlayer(newX, newY) {
     if (lose == false) {
-        ctx.clearRect(player.x - player.width / 2, player.y - player.height / 2, player.width + 1, player.height + 1);
-        ctx.fillStyle = player.color;
+        //ctx.clearRect(player.x - player.width / 2, player.y - player.height / 2, player.width + 1, player.height + 1);
+        deleteRect(player);     
+       
 
         player.x = newX;
         player.y = newY;
 
-        ctx.fillRect(player.x - player.width / 2, player.y - player.height / 2, player.width, player.height);
+        createRect(player);
+      
+        //ctx.fillRect(player.x - player.width / 2, player.y - player.height / 2, player.width, player.height);
     }
 }
 
@@ -66,10 +70,6 @@ function Update() {
         clearInterval(interMoveBullet);
         
         deleteRect(player);
-
-        ctx.font = "30px Arial"; // Fuente y tamaño de fuente
-        ctx.fillStyle = "black"; // Color del texto
-        ctx.fillText("Has perdido!", canvas.width / 2, canvas.height / 2);
     }
     else {
         for (let i = 0; i < bullets.length; i++) {
@@ -93,8 +93,11 @@ function Update() {
 Update();
 
 function createEnemy() {
-    let size = Math.random() * 20 + 10;
+    let size = Math.random() * 10 + 20;
     let enemy = new Enemy(Math.random() * rec.width, 30, size, size, "red", Math.random() * 10 + 10);
+
+    if(enemy.x == 0) enemy.x = size;
+    else if(enemy.x >= rec.width - size) enemy.x = enemy.x - size;
 
     enemies.push(enemy);
 
@@ -120,8 +123,8 @@ function createBullet()
     if (bullets[counter].on == false) 
     {
         bullets[counter].on = true;
-        bullets[counter].x = player.x;
-        bullets[counter].y = player.y;
+        bullets[counter].x = player.x + player.width/2 - bullets[counter].width/2;
+        bullets[counter].y = player.y - player.height/2 - 1;
     }
     counter++;
     if(counter == numBullets){
