@@ -38,7 +38,7 @@ function movePlayer(event) {
 
 function actPlayer(newX, newY) {
     if (lose == false) {
-        //ctx.clearRect(player.x - player.width / 2, player.y - player.height / 2, player.width + 1, player.height + 1);
+        
         deleteRect(player);     
        
 
@@ -47,7 +47,7 @@ function actPlayer(newX, newY) {
 
         createRect(player);
       
-        //ctx.fillRect(player.x - player.width / 2, player.y - player.height / 2, player.width, player.height);
+        
     }
 }
 
@@ -151,14 +151,18 @@ function moveBullet() {
     }
 }
 
-function createRect(thing) {
-    ctx.fillStyle = thing.color;
+function createRect(thing) 
+{
+    let img = document.createElement("img");
+    img.setAttribute("width",20);
+    img.setAttribute("he")
     ctx.fillRect(thing.x, thing.y, thing.width, thing.height);
 }
 
 
 
-function deleteRect(thing) {
+function deleteRect(thing) 
+{
     ctx.clearRect(thing.x - 1, thing.y - 1, thing.width + 2, thing.height + 2);
 }
 

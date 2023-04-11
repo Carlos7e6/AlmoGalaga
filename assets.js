@@ -21,7 +21,7 @@ class Asset{
 
 class Player extends Asset{
 
-    constructor(x , y, width, height, color)
+    constructor(x , y, width, height, img)
     {
         super(width, height, color);
         this.x = x / 2;
@@ -42,7 +42,7 @@ class Enemy extends Asset{
 
 class Bullet extends Asset
 {
-    constructor(x , y, width, height, color, speed, on)
+    constructor(x , y, width, height, img, speed, on)
     {
         super(width, height, color);
         this.x = x;
