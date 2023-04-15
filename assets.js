@@ -1,8 +1,8 @@
 class Asset{
-    constructor(width, height, color){
+    constructor(width, height, img){
         this.width = width;
         this.height = height;
-        this.color = color;
+        this.img = img;
     }
 
     checkCollision(rect2) {
@@ -21,22 +21,24 @@ class Asset{
 
 class Player extends Asset{
 
-    constructor(x , y, width, height, img)
+    constructor(x , y, width, height, img, on)
     {
-        super(width, height, color);
+        super(width, height, img);
         this.x = x / 2;
         this.y = y - 50;
+        this.on = on;
     }
 }
 
 class Enemy extends Asset{
 
-    constructor(x , y, width, height, color, speed)
+    constructor(x , y, width, height, img, speed, on)
     {
-        super(width, height, color);
+        super(width, height, img);
         this.x = x;
         this.y = y;
         this.speed = speed;
+        this.on = on;
     }
 }
 
@@ -44,7 +46,7 @@ class Bullet extends Asset
 {
     constructor(x , y, width, height, img, speed, on)
     {
-        super(width, height, color);
+        super(width, height, img);
         this.x = x;
         this.y = y;
         this.speed = speed;
