@@ -1,37 +1,35 @@
-"use strict";
 class Game {
 
-    constructor(canvasWidth, canvasHeight) {
+    constructor(canvasWidth, canvasHeight) 
+    {
         this.enemies = new Array(20);
         this.bullets = new Array(10);
-
         this.sizeEnemies = 40;
         this.lifes = 3;
-
         this.score = 0;
         this.timer = 0;
-
         this.lose = false;
-        // this.canva = document.getElementById("canvas");
-
         this.player = new Player(canvasWidth, canvasHeight, 30, 30, "src/player.png", false);
     }
 
-    fillAmmo() {
-
-        for (let i = 0; i < this.bullets.length; i++) {
+    fillAmmo() 
+    {
+        for (let i = 0; i < this.bullets.length; i++) 
+        {
             this.bullets[i] = new Bullet(this.player.x, this.player.y - this.player.height - 1, 5, 10, "src/bala.png", -7, false);
         }
 
     }
 
-    fillEnemies() {
+    fillEnemies() 
+    {
         let canvas = document.getElementById("canvas");
         let rec = canvas.getBoundingClientRect();
 
-        for (let i = 0; i < this.enemies.length; i++) {
+        for (let i = 0; i < this.enemies.length; i++) 
+        {
             let rnd = Math.floor((Math.random() * 19));
-            let enemy = new Enemy(this.sizeEnemies + (this.sizeEnemies * rnd), (this.sizeEnemies * -2), this.sizeEnemies, this.sizeEnemies, "src/enemy.png ", 2, false);
+            let enemy = new Enemy(this.sizeEnemies + (this.sizeEnemies * rnd), (this.sizeEnemies * -2), this.sizeEnemies, this.sizeEnemies, "src/enemy.png ", 1, false);
 
             if (enemy.x == 0) enemy.x = this.sizeEnemies;
             else if (enemy.x >= rec.width - this.sizeEnemies) enemy.x = enemy.x - this.sizeEnemies;
@@ -40,30 +38,31 @@ class Game {
         }
     }
 
-    movePlayer(event) {
+    movePlayer(event) 
+    {
         this.player.on = true;
-
-        let canvas = document.getElementById("canvas");
-        let rec = canvas.getBoundingClientRect();
+        let rec = document.getElementById("canvas").getBoundingClientRect();
 
         var mouseX = event.clientX - rec.left;
         var mouseY = event.clientY - rec.top;
 
         if (mouseX < rec.width - 30) {
-            if (this.lose == false) {
+            if (this.lose == false) 
+            {
                 this.deleteRect(this.player);
-
                 this.player.x = mouseX;
                 this.player.y = mouseY;
-
                 this.createRect(this.player);
             }
         }
     }
 
-    createEnemy() {
-        if (this.player.on == true) {
-            for (let i = 0; i < this.enemies.length; i++) {
+    createEnemy() 
+    {
+        if (this.player.on == true) 
+        {
+            for (let i = 0; i < this.enemies.length; i++) 
+            {
                 if (this.enemies[i].on == false) {
                     this.enemies[i].on = true;
                     break;
@@ -72,23 +71,25 @@ class Game {
         }
     }
 
-    moveEnemies() {
-
+    moveEnemies() 
+    {
         for (let i = 0; i < this.enemies.length; i++) {
 
-            if (this.enemies[i].on == true) {
+            if (this.enemies[i].on == true) 
+            {
                 this.deleteRect(this.enemies[i]);
-
                 this.enemies[i].y = this.enemies[i].y + this.enemies[i].speed;
-
                 this.createRect(this.enemies[i]);
             }
         }
     }
 
-    createBullet() {
-        if (this.player.on == true) {
-            for (let i = 0; i < this.bullets.length; i++) {
+    createBullet() 
+    {
+        if (this.player.on == true) 
+        {
+            for (let i = 0; i < this.bullets.length; i++) 
+            {
                 if (this.bullets[i].on == false) {
                     this.bullets[i].on = true;
                     this.bullets[i].x = this.player.x + this.player.width / 2 - this.bullets[i].width / 2;
@@ -99,47 +100,42 @@ class Game {
         }
     }
 
-    moveBullet() {
-
-        for (let i = 0; i < this.bullets.length; i++) {
-
-            if (this.bullets[i].on == true) {
-
+    moveBullet() 
+    {
+        for (let i = 0; i < this.bullets.length; i++)
+        {
+            if (this.bullets[i].on == true) 
+            {
                 this.deleteRect(this.bullets[i]);
                 this.bullets[i].y = this.bullets[i].y + this.bullets[i].speed;
 
-                if (this.bullets[i].y <= 0) {
-                    this.bullets[i].on = false;
-                }
-                else {
-                    this.createRect(this.bullets[i]);
-                }
+                if (this.bullets[i].y <= 0) this.bullets[i].on = false;
+                else this.createRect(this.bullets[i]);   
             }
         }
     }
 
-    createRect(thing) {
-
-        let canvas = document.getElementById("canvas");
-        let ctx = canvas.getContext("2d");
+    createRect(thing) 
+    {
+        let ctx = document.getElementById("canvas").getContext("2d");
 
         const image = new Image(thing.width, thing.height); // Using optional size for image
         image.src = thing.img;
 
         ctx.drawImage(image, thing.x, thing.y, thing.width, thing.height);
-
     }
 
-    deleteRect(thing) {
-        let canvas = document.getElementById("canvas");
-        let ctx = canvas.getContext("2d");
+    deleteRect(thing) 
+    {
+        let ctx = document.getElementById("canvas").getContext("2d");
         ctx.clearRect(thing.x - 1, thing.y - 1, thing.width + 2, thing.height + 2);
     }
 
-    setTime() {
-        if (this.player.on == true) {
+    setTime() 
+    {
+        if (this.player.on == true) 
+        {
             this.timer++;
-            let timer = document.getElementById("time");
             let min = 0;
             let seconds = this.timer;
 
@@ -147,16 +143,14 @@ class Game {
                 seconds -= 60;
                 min++;
             }
+            if (seconds < 10) seconds = "0" + seconds;
 
-            if (seconds < 10) {
-                seconds = "0" + seconds;
-            }
-
-            timer.innerHTML = "<span>Time</span><br>" + min + ":" + seconds;
+            document.getElementById("time").innerHTML = "<span>Time</span><br>" + min + ":" + seconds;
         }
     }
 
-    setImgLifes() {
+    setImgLifes() 
+    {
         let divNavesImg = document.createElement("div");
         divNavesImg.setAttribute("id", "divNaves");
 
@@ -170,7 +164,8 @@ class Game {
         document.body.appendChild(divNavesImg);
     }
 
-    modifyImgLifes() {
+    modifyImgLifes() 
+    {
         this.lifes--;
         let divNavesImg = document.getElementById("divNaves");
         divNavesImg.innerHTML = "";
@@ -185,8 +180,10 @@ class Game {
 
     }
 
-    deleteAll(thing) {
-        for (let x of thing) {
+    deleteAll(thing) 
+    {
+        for (let x of thing) 
+        {
             x.on = false;
             this.deleteRect(x);
         }
