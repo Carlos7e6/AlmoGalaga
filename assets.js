@@ -24,8 +24,8 @@ class Player extends Asset{
     constructor(x , y, width, height, img, on)
     {
         super(width, height, img);
-        this.x = x / 2;
-        this.y = y - 50;
+        this.x = x;
+        this.y = y;
         this.on = on;
     }
 }

@@ -19,9 +19,9 @@ function prepare() {
     let time = document.createElement("h1");
     let kill = document.createElement("h1");
 
-    time.textContent = "time";
+    time.innerHTML = "<span>time</span>";
     time.setAttribute("id", "time");
-    kill.textContent = "kill";
+    kill.innerHTML = "<span<kills</span>";
     kill.setAttribute("id", "kill");
 
     canvas.setAttribute("id", "canvas");
@@ -40,8 +40,8 @@ function prepare() {
     {
         let img = document.createElement("img");
         img.setAttribute("src",game.player.img);
-        img.setAttribute("width",game.player.width);
-        img.setAttribute("height",game.player.height);  
+        img.setAttribute("width",game.player.width *1.5);
+        img.setAttribute("height",game.player.height *1.5);  
         divNavesImg.appendChild(img);
     }
     document.body.appendChild(divNavesImg);
@@ -57,6 +57,8 @@ function StartGame()
     interCreateBullet = setInterval(createBullet, 400);
     interCreateEnemy = setInterval(createEnemy, 800);
     interTimer = setInterval(setTime, 1000);
+
+    game.createRect(game.player);
 
     Update();
 }
@@ -87,7 +89,6 @@ function Update() {
             game.modifyImgLifes();
             game.deleteRect(game.enemies[i]);
             game.enemies[i].restartStats(game.sizeEnemies);
-          
 
             if(game.lifes == 0)
             {     
@@ -98,7 +99,8 @@ function Update() {
         }
     }
 
-    if (game.lose) {
+    if (game.lose) 
+    {
         game.deleteRect(game.player);
         clearInterval(interTimer);
         clearInterval(interCreateEnemy);
@@ -114,7 +116,7 @@ function Update() {
                 {
                     if (game.enemies[j].y > 0) {
                         game.score++;
-                        document.getElementById("kill").innerHTML = "Kills:<br>" + game.score + "/100";
+                        document.getElementById("kill").innerHTML = "<span>Kills</span><br>" + game.score + "/100";
                         console.log(game.enemies[j] + game.bullets[i] + game.score);
                     }
 

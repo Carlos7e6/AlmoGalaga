@@ -146,8 +146,7 @@ class Game {
 
     setTime() 
     {
-        console.log("lo");
-        if(this.lose != true)
+        if(this.player.on == true)
         {
             this.timer++;
             let timer = document.getElementById("time");
@@ -164,7 +163,7 @@ class Game {
                 seconds = "0" + seconds;
             }
 
-            timer.innerHTML = "<span>Time<span><br>" + min + ":" + seconds;
+            timer.innerHTML = "<span>Time</span><br>" + min + ":" + seconds;
         }
     }
 
@@ -178,8 +177,8 @@ class Game {
         {
             let img = document.createElement("img");
             img.setAttribute("src",game.player.img);
-            img.setAttribute("width",game.player.width);
-            img.setAttribute("height",game.player.height);  
+            img.setAttribute("width",game.player.width * 1.5);
+            img.setAttribute("height",game.player.height * 1.5);  
             divNavesImg.appendChild(img);
         }
     }
@@ -193,4 +192,13 @@ class Game {
         }
     }
 
+
+    printEnd(lose)
+    {
+        let div = document.createElement("div");
+
+        let button = document.createElement("button");
+        
+        let h1 = document.createElement("h1");
+    }
 }
