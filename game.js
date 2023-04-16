@@ -2,50 +2,44 @@
 class Game {
 
     constructor(canvasWidth, canvasHeight) {
-        this.enemies = [];
-        this.bullets = [];
+        this.enemies = new Array(20);
+        this.bullets = new Array(10);
 
-        this.numBullets = 10;
-        this.numEnemies = 20;
         this.sizeEnemies = 40;
-
         this.lifes = 3;
         this.score = 0;
         this.timer = 0;
 
         this.lose = false;
-        this.canva = document.getElementById("canvas");
+        // this.canva = document.getElementById("canvas");
 
         this.player = new Player(canvasWidth, canvasHeight, 30, 30, "src/player.png", false);
     }
 
     fillAmmo() {
 
-        for (let i = 0; i < this.numBullets; i++) {
-            this.bullets.push(new Bullet(this.player.x, this.player.y - this.player.height - 1, 5, 10, "src/bala.png", -7, false));
+        for (let i = 0; i < this.bullets.length; i++) {
+            this.bullets[i] = new Bullet(this.player.x, this.player.y - this.player.height - 1, 5, 10, "src/bala.png", -7, false);
         }
 
     }
 
     fillEnemies() {
-
-
         let canvas = document.getElementById("canvas");
         let rec = canvas.getBoundingClientRect();
 
-        for (let i = 0; i < this.numEnemies; i++) {
+        for (let i = 0; i < this.enemies.length; i++) {
             let rnd = Math.floor((Math.random() * 19));
             let enemy = new Enemy(this.sizeEnemies + (this.sizeEnemies * rnd), (this.sizeEnemies * -2), this.sizeEnemies, this.sizeEnemies, "src/enemy.png ", 2, false);
 
             if (enemy.x == 0) enemy.x = this.sizeEnemies;
             else if (enemy.x >= rec.width - this.sizeEnemies) enemy.x = enemy.x - this.sizeEnemies;
 
-            this.enemies.push(enemy);
+            this.enemies[i] = enemy;
         }
     }
 
-    movePlayer(event) 
-    {
+    movePlayer(event) {
         this.player.on = true;
 
         let canvas = document.getElementById("canvas");
@@ -66,10 +60,9 @@ class Game {
         }
     }
 
-    createEnemy() 
-    {
+    createEnemy() {
         if (this.player.on == true) {
-            for (let i = 0; i < this.numEnemies; i++) {
+            for (let i = 0; i < this.enemies.length; i++) {
                 if (this.enemies[i].on == false) {
                     this.enemies[i].on = true;
                     break;
@@ -80,7 +73,7 @@ class Game {
 
     moveEnemies() {
 
-        for (let i = 0; i < this.numEnemies; i++) {
+        for (let i = 0; i < this.enemies.length; i++) {
 
             if (this.enemies[i].on == true) {
                 this.deleteRect(this.enemies[i]);
@@ -92,11 +85,10 @@ class Game {
         }
     }
 
-    createBullet() 
-    {
+    createBullet() {
         console.log("bullet");
         if (this.player.on == true) {
-            for (let i = 0; i < this.numBullets; i++) {
+            for (let i = 0; i < this.bullets.length; i++) {
                 if (this.bullets[i].on == false) {
                     this.bullets[i].on = true;
                     this.bullets[i].x = this.player.x + this.player.width / 2 - this.bullets[i].width / 2;
@@ -109,7 +101,8 @@ class Game {
 
     moveBullet() 
     {
-        for (let i = 0; i < this.numBullets; i++) {
+
+        for (let i = 0; i < this.bullets.length; i++) {
 
             if (this.bullets[i].on == true) {
 
@@ -144,22 +137,19 @@ class Game {
         ctx.clearRect(thing.x - 1, thing.y - 1, thing.width + 2, thing.height + 2);
     }
 
-    setTime() 
-    {
-        if(this.player.on == true)
-        {
+    setTime() {
+        if (this.player.on == true) {
             this.timer++;
             let timer = document.getElementById("time");
             let min = 0;
             let seconds = this.timer;
-    
+
             while (seconds >= 60) {
                 seconds -= 60;
                 min++;
             }
-            
-            if(seconds < 10)
-            {
+
+            if (seconds < 10) {
                 seconds = "0" + seconds;
             }
 
@@ -167,38 +157,42 @@ class Game {
         }
     }
 
-    modifyImgLifes()
+    setImgLifes()
+    {
+        let divNavesImg = document.createElement("div");
+        divNavesImg.setAttribute("id", "divNaves");
+    
+        for (let i = 0; i < game.lifes; i++) {
+            let img = document.createElement("img");
+            img.setAttribute("src", game.player.img);
+            img.setAttribute("width", game.player.width * 1.5);
+            img.setAttribute("height", game.player.height * 1.5);
+            divNavesImg.appendChild(img);
+        }
+        document.body.appendChild(divNavesImg);
+    }
+
+    modifyImgLifes() 
     {
         this.lifes--;
         let divNavesImg = document.getElementById("divNaves");
         divNavesImg.innerHTML = "";
-    
-        for(let i=0; i < this.lifes;i++)
-        {
+
+        for (let i = 0; i < this.lifes; i++) {
             let img = document.createElement("img");
-            img.setAttribute("src",game.player.img);
-            img.setAttribute("width",game.player.width * 1.5);
-            img.setAttribute("height",game.player.height * 1.5);  
+            img.setAttribute("src", game.player.img);
+            img.setAttribute("width", game.player.width * 1.5);
+            img.setAttribute("height", game.player.height * 1.5);
             divNavesImg.appendChild(img);
         }
+        
     }
 
-    deleteAllBullets()
-    {
-        for(let bullet of this.bullets)
-        {
-            bullet.on = false;
-            this.deleteRect(bullet);
+    deleteAll(thing) {
+        for (let x of thing) {
+            x.on = false;
+            this.deleteRect(x);
         }
     }
 
-
-    printEnd(lose)
-    {
-        let div = document.createElement("div");
-
-        let button = document.createElement("button");
-        
-        let h1 = document.createElement("h1");
-    }
 }

@@ -4,7 +4,7 @@
   }
 
 *{
-     /* border: 1px solid white;  */
+    border: 1px solid white;  
     margin: 0px;
     padding: 0;
     overflow-y: hidden;
@@ -79,22 +79,23 @@ article{
     height: 600px;
 }
 
-#startgame
+#startgame, .endButton
 {
     padding: 0.1em;
     border: 0.3em solid rgb(255, 255, 255);
     border-radius: 30px;
     background-color: rgba(0, 0, 0, 0.507);
+    z-index: 5;
 }
 
-#startgame:hover
+#startgame:hover, .endButton
 {
     background-color: rgba(57, 57, 57, 0.507);
 }
 
 
 
-#startgame p{
+#startgame p, .endButton p{
 
     font-family: spaceInvaders;
     font-size: 4em;
@@ -115,6 +116,15 @@ article{
 }
 span{
     border-bottom: 2px solid white ;
+}
+
+.endDiv
+{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    
+
 }
 
 
