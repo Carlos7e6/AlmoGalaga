@@ -1,169 +1,133 @@
-var enemies = [];
-var bullets = [];
-var numBullets = 10;
-var counter = 0;
+let start = document.getElementById("startgame");
+start.addEventListener("click", prepare);
+let canvaWidth = 800;
+let canvaHeight = 600;
 
-var score = 0;
-var lose = false;
+let interCreateBullet;
+let interCreateEnemy;
+let interTimer;
 
-var canvas = document.getElementById("canvas");
-canvas.addEventListener("mousemove", movePlayer);
-var ctx = canvas.getContext("2d");
-var rec = canvas.getBoundingClientRect();
+var game = new Game(canvaWidth, canvaHeight);
 
-var player = new Player(canvas.width, canvas.height, 20, 20, "blue");
-createRect(player);
+function prepare() {
 
-var interCreateEnemy = setInterval(createEnemy, 500);
-var interMoveEnemy = setInterval(moveEnemies, 500);
-var interCreateBullet = setInterval(createBullet, 500);
-var interMoveBullet = setInterval(moveBullet, 100);
+    let div = document.getElementById("preload");
+    div.remove();
+    let article = document.getElementsByTagName("article")[0];
 
-function fillAmmo() {
-    for (let i = 0; i < numBullets; i++) {
-        bullets.push(new Bullet(player.x, player.y - player.height - 1, 5, 10, "green", -20, false));
+    let canvas = document.createElement("canvas");
+    let time = document.createElement("h1");
+    let kill = document.createElement("h1");
+
+    time.textContent = "time";
+    time.setAttribute("id", "time");
+    kill.textContent = "kill";
+    kill.setAttribute("id", "kill");
+
+    canvas.setAttribute("id", "canvas");
+    canvas.setAttribute("width", canvaWidth);
+    canvas.setAttribute("height", canvaHeight);
+    canvas.addEventListener("mousemove", movePlayer);
+
+    article.appendChild(time);
+    article.appendChild(canvas);
+    article.appendChild(kill);
+
+    let divNavesImg = document.createElement("div");
+    divNavesImg.setAttribute("id","divNaves");
+
+    for(let i=0; i < game.lifes ;i++)
+    {
+        let img = document.createElement("img");
+        img.setAttribute("src",game.player.img);
+        img.setAttribute("width",game.player.width);
+        img.setAttribute("height",game.player.height);  
+        divNavesImg.appendChild(img);
     }
-    console.log(bullets);
+    document.body.appendChild(divNavesImg);
+
+    StartGame();
 }
 
-fillAmmo();
+function StartGame() 
+{
+    game.fillAmmo();
+    game.fillEnemies();
 
+    interCreateBullet = setInterval(createBullet, 400);
+    interCreateEnemy = setInterval(createEnemy, 800);
+    interTimer = setInterval(setTime, 1000);
 
-function movePlayer(event) {
-    var mouseX = event.clientX - rec.left;
-    var mouseY = event.clientY - rec.top;
-
-    actPlayer(mouseX, mouseY);
+    Update();
 }
 
-function actPlayer(newX, newY) {
-    if (lose == false) {
-        
-        deleteRect(player);     
-       
-
-        player.x = newX;
-        player.y = newY;
-
-        createRect(player);
-      
-        
-    }
+function setTime() {
+    game.setTime();
 }
-
-function Update() {
-
-    for (let i = 0; i < enemies.length; i++) {
-        if (player.checkCollision(enemies[i])) {
-            lose = true;
-        }
-
-        if (enemies[i].y >= rec.height) {
-            lose = true;
-        }
-    }
-
-    if (lose) {
-        clearInterval(interCreateEnemy);
-        clearInterval(interMoveEnemy);
-        clearInterval(interCreateBullet);
-        clearInterval(interMoveBullet);
-        
-        deleteRect(player);
-    }
-    else {
-        for (let i = 0; i < bullets.length; i++) {
-            for (let j = 0; j < enemies.length; j++) {
-
-                if (bullets[i].checkCollision(enemies[j])) 
-                {
-                    deleteRect(enemies[j]);
-                    deleteRect(bullets[i]);
-                    bullets[i].on = false;
-                    enemies.splice(j, 1);
-                }
-
-            }
-        }
-
-    }
-    requestAnimationFrame(Update);
-}
-
-Update();
 
 function createEnemy() {
-    let size = Math.random() * 10 + 20;
-    let enemy = new Enemy(Math.random() * rec.width, 30, size, size, "red", Math.random() * 10 + 10);
-
-    if(enemy.x == 0) enemy.x = size;
-    else if(enemy.x >= rec.width - size) enemy.x = enemy.x - size;
-
-    enemies.push(enemy);
-
-    ctx.fillStyle = enemy.color;
-    ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+    game.createEnemy();
 }
 
-function moveEnemies() {
-
-
-    for (let i = 0; i < enemies.length; i++) 
-    {
-        deleteRect(enemies[i]);
-
-        enemies[i].y = enemies[i].y + enemies[i].speed;
-
-        createRect(enemies[i]);
-    }
+function movePlayer(event) {
+    game.movePlayer(event);
 }
 
-function createBullet() 
-{
-    if (bullets[counter].on == false) 
-    {
-        bullets[counter].on = true;
-        bullets[counter].x = player.x + player.width/2 - bullets[counter].width/2;
-        bullets[counter].y = player.y - player.height/2 - 1;
-    }
-    counter++;
-    if(counter == numBullets){
-        counter = 0;
-    }
+function createBullet() {
+    game.createBullet();
 }
 
-function moveBullet() {
-    for (let i = 0; i < bullets.length; i++) {
 
-        if (bullets[i].on == true) {
+function Update() {
+    var rec = canvas.getBoundingClientRect();
 
-            deleteRect(bullets[i]);
-            bullets[i].y = bullets[i].y + bullets[i].speed;
+    for (let i = 0; i < game.numBullets; i++) {
+        if (game.player.checkCollision(game.enemies[i]) || game.enemies[i].y >= rec.height) 
+        {
+            game.modifyImgLifes();
+            game.deleteRect(game.enemies[i]);
+            game.enemies[i].restartStats(game.sizeEnemies);
+          
 
-            if (bullets[i].y <= 0) {
-                bullets[i].on = false;
+            if(game.lifes == 0)
+            {     
+                game.deleteAllBullets();
+                game.lose = true;
             }
-            else 
-            {
-                createRect(bullets[i]);
-            }
+
         }
     }
+
+    if (game.lose) {
+        game.deleteRect(game.player);
+        clearInterval(interTimer);
+        clearInterval(interCreateEnemy);
+        clearInterval(interCreateBullet);
+    }
+    else {
+        game.moveEnemies();
+        game.moveBullet();
+
+        for (let i = 0; i < game.numBullets; i++) {
+            for (let j = 0; j < game.enemies.length; j++) {
+                if (game.bullets[i].checkCollision(game.enemies[j])) 
+                {
+                    if (game.enemies[j].y > 0) {
+                        game.score++;
+                        document.getElementById("kill").innerHTML = "Kills:<br>" + game.score + "/100";
+                        console.log(game.enemies[j] + game.bullets[i] + game.score);
+                    }
+
+                    game.deleteRect(game.enemies[j]);
+                    game.deleteRect(game.bullets[i]);
+
+                    game.bullets[i].on = false;
+                    game.enemies[j].restartStats(game.sizeEnemies);
+                    break;
+                }
+            }
+        }
+        requestAnimationFrame(Update);
+    }
+
 }
-
-function createRect(thing) 
-{
-    let img = document.createElement("img");
-    img.setAttribute("width",20);
-    img.setAttribute("he")
-    ctx.fillRect(thing.x, thing.y, thing.width, thing.height);
-}
-
-
-
-function deleteRect(thing) 
-{
-    ctx.clearRect(thing.x - 1, thing.y - 1, thing.width + 2, thing.height + 2);
-}
-
-

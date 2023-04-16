@@ -40,6 +40,14 @@ class Enemy extends Asset{
         this.speed = speed;
         this.on = on;
     }
+
+    restartStats(sizeEnemies)
+    {
+        this.on = false;
+        let rnd = Math.floor((Math.random() * 19));
+        this.x = sizeEnemies + (sizeEnemies * rnd);
+        this.y = -10;
+    }
 }
 
 class Bullet extends Asset
