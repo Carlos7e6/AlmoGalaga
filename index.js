@@ -43,7 +43,7 @@ function StartGame() {
     game.fillEnemies();
 
     interCreateBullet = setInterval(createBullet, 400);
-    interCreateEnemy = setInterval(createEnemy, 800);
+    interCreateEnemy = setInterval(createEnemy, 600);
     interTimer = setInterval(setTime, 1000);
 
     Update();
@@ -100,11 +100,11 @@ function Update() {
         for (let i = 0; i < game.bullets.length; i++) {
             for (let j = 0; j < game.enemies.length; j++) {
                 if (game.bullets[i].checkCollision(game.enemies[j])) {
-                    if (game.enemies[j].y > 0) {
+                    if (game.enemies[j].y > 0) 
+                    {
                         game.score++;
-                        if(game.score == 100) game.lose = true;
                         document.getElementById("kill").innerHTML = "<span>Kills</span><br>" + game.score + "/100";
-                        console.log(game.enemies[j] + game.bullets[i] + game.score);
+                        if(game.score == 100) game.lose = true; 
                     }
 
                     game.deleteRect(game.enemies[j]);
@@ -153,7 +153,10 @@ function anotherGame()
     game.timer = 0;
     game.lose = false;
     game.lifes = 4;
-    game.on = false;
+    game.player.on = false;
+
+    document.getElementById("kill").innerHTML = "Kill";
+    document.getElementById("time").innerHTML = "Time"
     document.getElementById("canvas").style.cursor = "none";
 
     game.deleteAll(game.enemies);
