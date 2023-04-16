@@ -113,10 +113,10 @@ function printEnd() {
     button.addEventListener("click", anotherGame);
 
     if (game.score == 100) {
-        h1.innerHTML = "Has ganado";
+        h1.innerHTML = "YOU WIN";
     }
     else {
-        h1.innerHTML = "Has perdido";
+        h1.innerHTML = "YOU LOST";
     }
 
     div.appendChild(h1);
