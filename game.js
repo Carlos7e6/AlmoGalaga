@@ -40,9 +40,7 @@ class Game {
         }
     }
 
-    movePlayer(event) 
-    {
-        console.log("move");
+    movePlayer(event) {
         this.player.on = true;
 
         let canvas = document.getElementById("canvas");
@@ -89,7 +87,6 @@ class Game {
     }
 
     createBullet() {
-        console.log("bullet");
         if (this.player.on == true) {
             for (let i = 0; i < this.bullets.length; i++) {
                 if (this.bullets[i].on == false) {
@@ -102,8 +99,7 @@ class Game {
         }
     }
 
-    moveBullet() 
-    {
+    moveBullet() {
 
         for (let i = 0; i < this.bullets.length; i++) {
 
@@ -160,11 +156,10 @@ class Game {
         }
     }
 
-    setImgLifes()
-    {
+    setImgLifes() {
         let divNavesImg = document.createElement("div");
         divNavesImg.setAttribute("id", "divNaves");
-    
+
         for (let i = 0; i < game.lifes; i++) {
             let img = document.createElement("img");
             img.setAttribute("src", game.player.img);
@@ -175,8 +170,7 @@ class Game {
         document.body.appendChild(divNavesImg);
     }
 
-    modifyImgLifes() 
-    {
+    modifyImgLifes() {
         this.lifes--;
         let divNavesImg = document.getElementById("divNaves");
         divNavesImg.innerHTML = "";
@@ -188,7 +182,7 @@ class Game {
             img.setAttribute("height", game.player.height * 1.5);
             divNavesImg.appendChild(img);
         }
-        
+
     }
 
     deleteAll(thing) {
