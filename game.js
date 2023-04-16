@@ -7,7 +7,7 @@ class Game {
 
         this.sizeEnemies = 40;
         this.lifes = 3;
-        this.score = 0;
+        this.score = 98;
         this.timer = 0;
 
         this.lose = false;

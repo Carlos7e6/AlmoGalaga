@@ -78,7 +78,7 @@ function Update() {
             if (game.lifes == 0) {
                 game.deleteAll(game.bullets);
                 game.lose = true;
-            }
+            }           
         }
     }
 
@@ -102,6 +102,7 @@ function Update() {
                 if (game.bullets[i].checkCollision(game.enemies[j])) {
                     if (game.enemies[j].y > 0) {
                         game.score++;
+                        if(game.score == 100) game.lose = true;
                         document.getElementById("kill").innerHTML = "<span>Kills</span><br>" + game.score + "/100";
                         console.log(game.enemies[j] + game.bullets[i] + game.score);
                     }
@@ -153,8 +154,10 @@ function anotherGame()
     game.lose = false;
     game.lifes = 4;
     game.on = false;
+    document.getElementById("canvas").style.cursor = "none";
 
     game.deleteAll(game.enemies);
+    game.deleteAll(game.bullets);
     game.fillAmmo();
     game.fillEnemies();
     game.modifyImgLifes();
