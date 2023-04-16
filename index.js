@@ -49,29 +49,33 @@ function StartGame() {
     game.fillEnemies();
 
     interCreateBullet = setInterval(createBullet, 300);
-    interCreateEnemy = setInterval(createEnemy, 700);
+    interCreateEnemy = setInterval(createEnemy, 600);
     interTimer = setInterval(setTime, 1000);
 
     Update();
 }
 
+//Esta funcion la creo para usar el metodo de game en el interval
 function setTime() {
     game.setTime();
 }
 
+//Esta funcion la creo para usar el metodo de game en el interval
 function createEnemy() {
     game.createEnemy();
 }
 
+//Esta funcion la creo para usar el metodo de game en el evento del mousemove
 function movePlayer(event) {
     game.movePlayer(event);
 }
 
+//Esta funcion la creo para usar el metodo de game en el interval
 function createBullet() {
     game.createBullet();
 }
 
-///Esta es la funcion update 
+///La funcion update me va ayudar a comprobar la posicion de los assets y sus respectivos acontecimientos 
 function Update() {
 
    game.detectEnemies();
@@ -86,7 +90,8 @@ function Update() {
         printEnd();
 
     }
-    else {
+    else 
+    {
         game.moveEnemies();
         game.moveBullet();
         game.bulletImpact();
@@ -95,6 +100,7 @@ function Update() {
 
 }
 
+//Esta funcion printa el div del final
 function printEnd() {
     let div = document.createElement("div");
     let button = document.createElement("button");
@@ -119,7 +125,7 @@ function printEnd() {
     document.body.appendChild(div);
 }
 
-
+//Esta funcion se ejecuta cuando el jugador decide hacer una partida de nuevo
 function anotherGame() {
     document.getElementsByClassName("endDiv")[0].remove();
     game.score = 0;

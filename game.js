@@ -12,15 +12,17 @@ class Game {
         this.player = new Player(canvasWidth, canvasHeight, 30, 30, "src/player.png", false);
     }
 
+    //Esta funcion llena el array bullets de objetos bala default
     fillAmmo() 
     {
         for (let i = 0; i < this.bullets.length; i++) 
         {
-            this.bullets[i] = new Bullet(this.player.x, this.player.y - this.player.height - 1, 5, 10, "src/bala.png", -7, false);
+            this.bullets[i] = new Bullet(this.player.x, this.player.y - this.player.height - 1, 5, 10, "src/bala.png", -5, false);
         }
 
     }
 
+    //Esta funcion llena el array enemies de objetos enemy con valores default
     fillEnemies() 
     {
         let canvas = document.getElementById("canvas");
@@ -29,7 +31,7 @@ class Game {
         for (let i = 0; i < this.enemies.length; i++) 
         {
             let rnd = Math.floor((Math.random() * 19));
-            let enemy = new Enemy(this.sizeEnemies + (this.sizeEnemies * rnd), (this.sizeEnemies * -2), this.sizeEnemies, this.sizeEnemies, "src/enemy.png ", 2, false);
+            let enemy = new Enemy(this.sizeEnemies + (this.sizeEnemies * rnd), (this.sizeEnemies * -2), this.sizeEnemies, this.sizeEnemies, "src/enemy.png ", 1, false);
 
             if (enemy.x == 0) enemy.x = this.sizeEnemies;
             else if (enemy.x >= rec.width - this.sizeEnemies) enemy.x = enemy.x - this.sizeEnemies;
@@ -38,6 +40,7 @@ class Game {
         }
     }
 
+    //Esta funcion se ejecuta cada vez que el jugador mueve el mouse y actualiza la posicion del player
     movePlayer(event) 
     {
         this.player.on = true;
@@ -57,6 +60,7 @@ class Game {
         }
     }
 
+    //Esta funcion se encarga de dar como operativo un enemigo 
     createEnemy() 
     {
         if (this.player.on == true) 
@@ -71,6 +75,7 @@ class Game {
         }
     }
 
+    //Esta funcion es la encargada de mover todos los enemigos operativos
     moveEnemies() 
     {
         for (let i = 0; i < this.enemies.length; i++) {
@@ -84,6 +89,7 @@ class Game {
         }
     }
 
+    //Esta funcion se encarga de dar como operativa una bala
     createBullet() 
     {
         if (this.player.on == true) 
@@ -100,6 +106,7 @@ class Game {
         }
     }
 
+    //Esta funcion se encarga de mover las balas operativas
     moveBullet() 
     {
         for (let i = 0; i < this.bullets.length; i++)
@@ -115,6 +122,7 @@ class Game {
         }
     }
 
+    //Esta funcion crea en el canva el objeto que se ponga en el argumento
     createRect(thing) 
     {
         let ctx = document.getElementById("canvas").getContext("2d");
@@ -125,12 +133,14 @@ class Game {
         ctx.drawImage(image, thing.x, thing.y, thing.width, thing.height);
     }
 
+    //Esta funcion elimina del canva el objeto que se ponga en el argumento
     deleteRect(thing) 
     {
         let ctx = document.getElementById("canvas").getContext("2d");
         ctx.clearRect(thing.x - 1, thing.y - 1, thing.width + 2, thing.height + 2);
     }
 
+    //Esta funcion es la encargada de calcular y printar por pantalla el tiempo actual
     setTime() 
     {
         if (this.player.on == true) 
@@ -149,6 +159,7 @@ class Game {
         }
     }
 
+    //Esta funcion es la encargada de printa por pantalla con img cuantas vidas tiene el player
     setImgLifes() 
     {
         let divNavesImg = document.createElement("div");
@@ -164,6 +175,7 @@ class Game {
         document.body.appendChild(divNavesImg);
     }
 
+    //Esta funcion se encarga de actualizar las vidas del player
     modifyImgLifes() 
     {
         this.lifes--;
@@ -180,6 +192,7 @@ class Game {
 
     }
 
+    //Esta funcion desoperativa y borra el asset del argumento
     deleteAll(thing) 
     {
         for (let x of thing) 
@@ -189,6 +202,9 @@ class Game {
         }
     }
 
+    //Esta funcion es la encarga de detectar los enemigos que colisionan con el player
+    //hacer los respectivos calculos y acciones
+    //y tambien de si el enemigo llega al final del canva vertical
     detectEnemies()
     {
         let rec = document.getElementById("canvas").getBoundingClientRect();
@@ -206,6 +222,8 @@ class Game {
         }
     }
 
+    //Esta funcion esta encargada de comprobar cuando una bala impacta contra un enemigo
+    //cuando llega a 100 la puntuacion tambien es la encargada de acabar la partida
     bulletImpact()
     {
         for (let i = 0; i < this.bullets.length; i++) {
