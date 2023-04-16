@@ -7,7 +7,7 @@ class Game {
 
         this.sizeEnemies = 40;
         this.lifes = 3;
-        this.score = 98;
+        this.score = 0;
         this.timer = 0;
 
         this.lose = false;
@@ -39,7 +39,9 @@ class Game {
         }
     }
 
-    movePlayer(event) {
+    movePlayer(event) 
+    {
+        console.log("move");
         this.player.on = true;
 
         let canvas = document.getElementById("canvas");
