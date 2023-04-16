@@ -1,3 +1,4 @@
+
 let start = document.getElementById("startgame");
 start.addEventListener("click", prepare);
 let canvaWidth = 800;
@@ -9,6 +10,8 @@ let interTimer;
 
 var game = new Game(canvaWidth, canvaHeight);
 
+//En esta funcion pongo todos los elementos necesarios en la IU
+//para pode comenzar a jugar
 function prepare() {
 
     let div = document.getElementById("preload");
@@ -38,12 +41,15 @@ function prepare() {
     StartGame();
 }
 
+//En esta funcion establezco los parametros predeterminados de mis enemigos y balas
+// y doy inicio a los intervalos de disparos, creacion de enemigos y temporizadorç
+//seguidamente llamo al update
 function StartGame() {
     game.fillAmmo();
     game.fillEnemies();
 
-    interCreateBullet = setInterval(createBullet, 400);
-    interCreateEnemy = setInterval(createEnemy, 600);
+    interCreateBullet = setInterval(createBullet, 300);
+    interCreateEnemy = setInterval(createEnemy, 700);
     interTimer = setInterval(setTime, 1000);
 
     Update();
@@ -65,56 +71,25 @@ function createBullet() {
     game.createBullet();
 }
 
-
+///Esta es la funcion update 
 function Update() {
-    var rec = canvas.getBoundingClientRect();
 
-    for (let i = 0; i < game.bullets.length; i++) {
-        if (game.player.checkCollision(game.enemies[i]) || game.enemies[i].y >= rec.height) {
-            game.modifyImgLifes();
-            game.deleteRect(game.enemies[i]);
-            game.enemies[i].restartStats(game.sizeEnemies);
+   game.detectEnemies();
 
-            if (game.lifes == 0) {
-                game.deleteAll(game.bullets);
-                game.lose = true;
-            }
-        }
-    }
-
-    if (game.lose) {
+    if (game.lose) 
+    {
         game.deleteRect(game.player);
         clearInterval(interTimer);
         clearInterval(interCreateEnemy);
         clearInterval(interCreateBullet);
-        let canvas = document.getElementById("canvas");
-        canvas.style.cursor = "auto";
+        document.getElementById("canvas").style.cursor = "auto";
         printEnd();
-
 
     }
     else {
         game.moveEnemies();
         game.moveBullet();
-
-        for (let i = 0; i < game.bullets.length; i++) {
-            for (let j = 0; j < game.enemies.length; j++) {
-                if (game.bullets[i].checkCollision(game.enemies[j])) {
-                    if (game.enemies[j].y > 0) {
-                        game.score++;
-                        document.getElementById("kill").innerHTML = "<span>Kills</span><br>" + game.score + "/100";
-                        if (game.score == 100) game.lose = true;
-                    }
-
-                    game.deleteRect(game.enemies[j]);
-                    game.deleteRect(game.bullets[i]);
-
-                    game.bullets[i].on = false;
-                    game.enemies[j].restartStats(game.sizeEnemies);
-                    break;
-                }
-            }
-        }
+        game.bulletImpact();
         requestAnimationFrame(Update);
     }
 

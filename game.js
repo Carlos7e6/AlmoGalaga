@@ -29,7 +29,7 @@ class Game {
         for (let i = 0; i < this.enemies.length; i++) 
         {
             let rnd = Math.floor((Math.random() * 19));
-            let enemy = new Enemy(this.sizeEnemies + (this.sizeEnemies * rnd), (this.sizeEnemies * -2), this.sizeEnemies, this.sizeEnemies, "src/enemy.png ", 1, false);
+            let enemy = new Enemy(this.sizeEnemies + (this.sizeEnemies * rnd), (this.sizeEnemies * -2), this.sizeEnemies, this.sizeEnemies, "src/enemy.png ", 2, false);
 
             if (enemy.x == 0) enemy.x = this.sizeEnemies;
             else if (enemy.x >= rec.width - this.sizeEnemies) enemy.x = enemy.x - this.sizeEnemies;
@@ -188,5 +188,45 @@ class Game {
             this.deleteRect(x);
         }
     }
+
+    detectEnemies()
+    {
+        let rec = document.getElementById("canvas").getBoundingClientRect();
+        for (let i = 0; i < this.enemies.length; i++) {
+            if (this.player.checkCollision(this.enemies[i]) || this.enemies[i].y >= rec.height) {
+                this.modifyImgLifes();
+                this.deleteRect(this.enemies[i]);
+                this.enemies[i].restartStats(this.sizeEnemies);
+    
+                if (this.lifes == 0) {
+                    this.deleteAll(this.bullets);
+                    this.lose = true;
+                }
+            }
+        }
+    }
+
+    bulletImpact()
+    {
+        for (let i = 0; i < this.bullets.length; i++) {
+            for (let j = 0; j < this.enemies.length; j++) {
+                if (this.bullets[i].checkCollision(this.enemies[j])) {
+                    if (this.enemies[j].y > 0) {
+                        this.score++;
+                        document.getElementById("kill").innerHTML = "<span>Kills</span><br>" + this.score + "/100";
+                        if (this.score == 100) this.lose = true;
+                    }
+
+                    this.deleteRect(this.enemies[j]);
+                    this.deleteRect(this.bullets[i]);
+
+                    this.bullets[i].on = false;
+                    this.enemies[j].restartStats(this.sizeEnemies);
+                    break;
+                }
+            }
+        }
+    }
+
 
 }
