@@ -17,7 +17,7 @@ class Game {
     {
         for (let i = 0; i < this.bullets.length; i++) 
         {
-            this.bullets[i] = new Bullet(this.player.x, this.player.y - this.player.height - 1, 5, 10, "src/bala.png", -5, false);
+            this.bullets[i] = new Bullet(this.player.x, this.player.y - this.player.height - 1, 5, 10, "src/bala.png", -7, false);
         }
 
     }
@@ -31,7 +31,7 @@ class Game {
         for (let i = 0; i < this.enemies.length; i++) 
         {
             let rnd = Math.floor((Math.random() * 19));
-            let enemy = new Enemy(this.sizeEnemies + (this.sizeEnemies * rnd), (this.sizeEnemies * -2), this.sizeEnemies, this.sizeEnemies, "src/enemy.png ", 1, false);
+            let enemy = new Enemy(this.sizeEnemies + (this.sizeEnemies * rnd), (this.sizeEnemies * -2), this.sizeEnemies, this.sizeEnemies, "src/enemy.png ", 2, false);
 
             if (enemy.x == 0) enemy.x = this.sizeEnemies;
             else if (enemy.x >= rec.width - this.sizeEnemies) enemy.x = enemy.x - this.sizeEnemies;
